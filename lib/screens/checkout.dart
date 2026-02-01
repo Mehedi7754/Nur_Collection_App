@@ -174,7 +174,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       ),
                     ),
                     Text(
-                      '\$${displayTotal.toStringAsFixed(2)}',
+                      '${AppConstants.currencySymbol}${displayTotal.toStringAsFixed(2)}',
                       style: TextStyle(
                         fontSize: 24,
                         fontWeight: FontWeight.bold,

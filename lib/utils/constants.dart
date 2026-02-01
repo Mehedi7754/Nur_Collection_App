@@ -15,6 +15,8 @@ class AppConstants {
   static const String usersCollection = 'users';
   static const String productsCollection = 'products';
   static const String ordersCollection = 'orders';
+  static const String currencySymbol = '৳';
+
   
   static const List<String> categories = [
     'All',

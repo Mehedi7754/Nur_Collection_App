@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../models/product_model.dart';
 import '../providers/cart_provider.dart';
 import '../providers/auth_provider.dart';
@@ -12,6 +13,40 @@ class ProductDetailsScreen extends StatelessWidget {
   final ProductModel product;
 
   const ProductDetailsScreen({super.key, required this.product});
+
+  Future<void> _launchWhatsApp(BuildContext context) async {
+    final String phoneNumber = "+8801718100039";
+    final String message = "Hello, I want to order this product:\n\n"
+        "Product: ${product.name}\n"
+        "ID: ${product.id}\n"
+        "Price: ${AppConstants.currencySymbol}${product.price.toStringAsFixed(2)}\n"
+        "Description: ${product.description ?? 'N/A'}\n\n"
+        "Please confirm my order.";
+
+    final String urlString = "https://wa.me/${phoneNumber.replaceAll('+', '')}?text=${Uri.encodeFull(message)}";
+    final Uri url = Uri.parse(urlString);
+
+    try {
+      if (await canLaunchUrl(url)) {
+        await launchUrl(
+          url,
+          mode: LaunchMode.externalApplication,
+        );
+      } else {
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Could not launch WhatsApp')),
+          );
+        }
+      }
+    } catch (e) {
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error: $e')),
+        );
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -76,8 +111,8 @@ class ProductDetailsScreen extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        '\$${product.price.toStringAsFixed(2)}',
-                        style: TextStyle(
+                        '${AppConstants.currencySymbol}${product.price.toStringAsFixed(2)}',
+                        style: const TextStyle(
                           fontSize: 28,
                           fontWeight: FontWeight.bold,
                           color: AppColors.primaryColor,
@@ -221,6 +256,31 @@ class ProductDetailsScreen extends StatelessWidget {
                       style: OutlinedButton.styleFrom(
                         foregroundColor: AppColors.primaryColor,
                         side: const BorderSide(color: AppColors.primaryColor, width: 2),
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 12),
+
+                  // Order on WhatsApp Button
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton.icon(
+                      onPressed: () => _launchWhatsApp(context),
+                      icon: const Icon(Icons.message, color: AppColors.white),
+                      label: const Text(
+                        'Order on WhatsApp',
+                        style: TextStyle(
+                          color: AppColors.white,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF25D366), // WhatsApp Green
                         padding: const EdgeInsets.symmetric(vertical: 16),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),

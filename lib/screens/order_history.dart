@@ -201,14 +201,14 @@ class _OrderCard extends StatelessWidget {
                                 style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 14),
                               ),
                               Text(
-                                '${product.quantity} x \$${product.price.toStringAsFixed(2)}',
+                                '${product.quantity} x ${AppConstants.currencySymbol}${product.price.toStringAsFixed(2)}',
                                 style: const TextStyle(color: AppColors.grey, fontSize: 12),
                               ),
                             ],
                           ),
                         ),
                         Text(
-                          '\$${(product.quantity * product.price).toStringAsFixed(2)}',
+                          '${AppConstants.currencySymbol}${(product.quantity * product.price).toStringAsFixed(2)}',
                           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 14),
                         ),
                       ],
@@ -225,7 +225,7 @@ class _OrderCard extends StatelessWidget {
                         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
                       ),
                       Text(
-                        '\$${order.totalPrice.toStringAsFixed(2)}',
+                        '${AppConstants.currencySymbol}${order.totalPrice.toStringAsFixed(2)}',
                         style: const TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 18,
